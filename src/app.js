@@ -1,7 +1,11 @@
 import { loadFiles } from "@graphql-tools/load-files"
-import { createServer } from "node:http"
 import { createYoga, createSchema } from "graphql-yoga"
 import { resolvers } from "./resolvers.js"
+import express from "express"
+const __dirname = import.meta.dirname;
+
+
+const app = express()
 
 const schema = createSchema({
   typeDefs: await loadFiles("src/schema.graphql"),
@@ -9,8 +13,13 @@ const schema = createSchema({
 })
 
 const yoga = createYoga({ schema })
-const server = createServer(yoga)
 
-server.listen(4000, () => {
+app.use(yoga.graphqlEndpoint, yoga)
+
+app.get("/voyager", (req, res) => {
+  res.sendFile(__dirname + "/voyager.html")
+})
+
+app.listen(4000, () => {
   console.info("Server is running on http://localhost:4000/graphql")
 })
