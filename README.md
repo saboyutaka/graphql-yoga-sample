@@ -6,4 +6,4 @@
 docker compose up -d
 ```
 
-http://localhost:4000 にアクセス
+http://localhost:4000/graphql にアクセス
